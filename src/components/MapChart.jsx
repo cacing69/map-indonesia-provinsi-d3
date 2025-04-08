@@ -1,44 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { budgetData } from "../data/budgetData";
 
-const MapChart = () => {
+const MapChart = ({data}) => {
     const svgRef = useRef();
     const tooltipRef = useRef(null);
 
     // Data sample static untuk tooltip
-    const provinceDetails = {
-        "Kalimantan Timur": {
-            activeProjects: 2,
-            totalFunding: "+Rp.300 Juta",
-            totalVolunteers: "+15.000",
-            mostAction: true,
-            logoUrl: "/logo.png",
-        },
-        "Aceh": {
-            activeProjects: 4,
-            totalFunding: "+Rp.1 Miliar",
-            totalVolunteers: "+90.000",
-            mostAction: true,
-            logoUrl: "/logo.png",
-        },
-        "Sumatera Utara": {
-            activeProjects: 5,
-            totalFunding: "+Rp.2 Miliar",
-            totalVolunteers: "+320.000",
-            mostAction: true,
-            logoUrl: "/logo.png",
-        },
-        "Sumatera Barat": {
-            activeProjects: 6,
-            totalFunding: "+Rp.3 Miliar",
-            totalVolunteers: "+220.000",
-            mostAction: true,
-            logoUrl: "/logo.png",
-        },
-
-    };
-
     useEffect(() => {
         // Load SVG map
         fetch("/indonesia.svg")
@@ -49,7 +16,7 @@ const MapChart = () => {
 
                 const provinces = d3.selectAll("path");
 
-                const budgets = budgetData.map((item) => item.budget);
+                const budgets = data.map((item) => item.budget);
                 const minBudget = Math.min(...budgets);
                 const maxBudget = Math.max(...budgets);
                 const colorScale = d3
@@ -60,7 +27,7 @@ const MapChart = () => {
 
                 provinces.each(function () {
                     const provinceName = this.id;
-                    const provinceInfo = budgetData.find(
+                    const provinceInfo = data.find(
                         (item) => item.province === provinceName
                     );
                     if (provinceInfo) {
@@ -88,7 +55,7 @@ const MapChart = () => {
                 provinces
                     .on("mouseover", function (event, d) {
                         const provinceName = this.id;
-                        const provinceInfo = budgetData.find(
+                        const provinceInfo = data.find(
                             (item) => item.province === provinceName
                         );
 
@@ -99,8 +66,8 @@ const MapChart = () => {
                             d3.select(this).style("fill", highlightedColor);
 
                             // Show tooltip with detailed information
-                            const details = provinceDetails[provinceName];
-                            if (!details) return; // Skip if no details available for this province
+                            // const details = provinceDetails[provinceName];
+                            // if (!details) return; // Skip if no details available for this province
 
                             const tooltipContent = `
                 <div style="display: flex; flex-direction: column; gap: 8px;padding:10px">
@@ -112,22 +79,22 @@ const MapChart = () => {
                     <!-- Kolom Kiri -->
                     <div style="width: 45%;">
                       <p style="font-size: 10px; color: #000; margin: 0;">PROJECT AKTIF</p>
-                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${details.activeProjects} Project</h2>
+                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.activeProjects} Project</h2>
                       <p style="font-size: 10px; color: #000; margin: 0;">MOST ACTION</p>
-                      ${details.mostAction
+                      ${provinceInfo.mostAction
                                     ? '<div style="width: 100%; height: 8px; background-color: #8b0000;"></div>'
                                     : ""
                                 }
-                      <img src="${details.logoUrl}" alt="Logo" style="max-width: 120px; margin-top: 10px;padding-top:5px;" />
+                      <img src="${provinceInfo.logoUrl}" alt="Logo" style="max-width: 120px; margin-top: 10px;padding-top:5px;" />
                     </div>
 
                     <!-- Kolom Kanan -->
                     <div style="width: 45%; padding-right:20px;padding-left:20px;">
                       <p style="font-size: 10px; color: #000; margin: 0;">TOTAL FUNDING</p>
-                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${details.totalFunding}</h2>
+                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.totalFunding}</h2>
                       <p style="font-size: 10px; color: #000; margin: 0;">TOTAL VOLUNTEER</p>
                       <div style="display: flex; align-items: center; gap: 2px;padding-bottom:5px;">
-                        <h2 style="font-size: 18px; color: #000; margin: 0;">${details.totalVolunteers}</h2>
+                        <h2 style="font-size: 18px; color: #000; margin: 0;">${provinceInfo.totalVolunteers}</h2>
                         <span style="font-size: 11px; color: #000; margin: 0;">Orang</span>
                       </div>
                       <a
