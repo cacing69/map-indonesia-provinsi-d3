@@ -20,9 +20,8 @@ const MapChart = ({data}) => {
                 const minBudget = Math.min(...budgets);
                 const maxBudget = Math.max(...budgets);
                 const colorScale = d3
-                    .scaleLinear()
-                    .domain([minBudget, maxBudget])
-                    .range(["#FF69B4", "#000000"]);
+                    .scaleSequential(d3.interpolateRgb("#fe71b5", "#7a0941"))
+                    .domain([minBudget, maxBudget]);
 
 
                 provinces.each(function () {
@@ -70,43 +69,43 @@ const MapChart = ({data}) => {
                             // if (!details) return; // Skip if no details available for this province
 
                             const tooltipContent = `
-                <div style="display: flex; flex-direction: column; gap: 8px;padding:10px">
-                  <!-- Judul Provinsi -->
-                  <p style="font-size: 16px; font-weight: bold; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.province.toUpperCase()}</p>
+                                <div style="display: flex; flex-direction: column; gap: 8px;padding:10px">
+                                <!-- Judul Provinsi -->
+                                <p style="font-size: 16px; font-weight: bold; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.province.toUpperCase()}</p>
 
-                  <!-- Kolom Utama -->
-                  <div style="display: flex; justify-content: space-between; gap: 20px;">
-                    <!-- Kolom Kiri -->
-                    <div style="width: 45%;">
-                      <p style="font-size: 10px; color: #000; margin: 0;">PROJECT AKTIF</p>
-                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.activeProjects} Project</h2>
-                      <p style="font-size: 10px; color: #000; margin: 0;">MOST ACTION</p>
-                      ${provinceInfo.mostAction
-                                    ? '<div style="width: 100%; height: 8px; background-color: #8b0000;"></div>'
-                                    : ""
-                                }
-                      <img src="${provinceInfo.logoUrl}" alt="Logo" style="max-width: 120px; margin-top: 10px;padding-top:5px;" />
-                    </div>
+                                <!-- Kolom Utama -->
+                                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                                    <!-- Kolom Kiri -->
+                                    <div style="width: 45%;">
+                                    <p style="font-size: 10px; color: #000; margin: 0;">PROJECT AKTIF</p>
+                                    <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.activeProjects} Project</h2>
+                                    <p style="font-size: 10px; color: #000; margin: 0;">MOST ACTION</p>
+                                    ${provinceInfo.mostAction
+                                                    ? '<div style="width: 100%; height: 8px; background-color: #8b0000;"></div>'
+                                                    : ""
+                                                }
+                                    <img src="${provinceInfo.logoUrl}" alt="Logo" style="max-width: 120px; margin-top: 10px;padding-top:5px;" />
+                                    </div>
 
-                    <!-- Kolom Kanan -->
-                    <div style="width: 45%; padding-right:20px;padding-left:20px;">
-                      <p style="font-size: 10px; color: #000; margin: 0;">TOTAL FUNDING</p>
-                      <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.totalFunding}</h2>
-                      <p style="font-size: 10px; color: #000; margin: 0;">TOTAL VOLUNTEER</p>
-                      <div style="display: flex; align-items: center; gap: 2px;padding-bottom:5px;">
-                        <h2 style="font-size: 18px; color: #000; margin: 0;">${provinceInfo.totalVolunteers}</h2>
-                        <span style="font-size: 11px; color: #000; margin: 0;">Orang</span>
-                      </div>
-                      <a
-                        style="cursor: pointer;font-size: 12px;background: transparent; border: none; color: #ff69b4; font-weight: bold; text-decoration: underline; margin: 0; white-space: nowrap;"
-                        onclick="window.location.href='https://example.com';"
-                      >
-                        SELENGKAPNYA →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              `;
+                                    <!-- Kolom Kanan -->
+                                    <div style="width: 45%; padding-right:20px;padding-left:20px;">
+                                    <p style="font-size: 10px; color: #000; margin: 0;">TOTAL FUNDING</p>
+                                    <h2 style="font-size: 18px; color: #000; margin: 0;padding-bottom:10px;">${provinceInfo.totalFunding}</h2>
+                                    <p style="font-size: 10px; color: #000; margin: 0;">TOTAL VOLUNTEER</p>
+                                    <div style="display: flex; align-items: center; gap: 2px;padding-bottom:5px;">
+                                        <h2 style="font-size: 18px; color: #000; margin: 0;">${provinceInfo.totalVolunteers}</h2>
+                                        <span style="font-size: 11px; color: #000; margin: 0;">Orang</span>
+                                    </div>
+                                    <a
+                                        style="cursor: pointer;font-size: 12px;background: transparent; border: none; color: #ff69b4; font-weight: bold; text-decoration: underline; margin: 0; white-space: nowrap;"
+                                        onclick="window.location.href='https://example.com';"
+                                    >
+                                        SELENGKAPNYA →
+                                    </a>
+                                    </div>
+                                </div>
+                                </div>
+                            `;
                             tooltip.html(tooltipContent);
 
                             // Position tooltip near the hovered province
